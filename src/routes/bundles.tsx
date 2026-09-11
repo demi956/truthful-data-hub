@@ -37,7 +37,7 @@ export const Route = createFileRoute("/bundles")({
       },
     ],
   }),
-  component: Bundles;
+  component: Bundles,
 });
 
 type Bundle = { id: string; network: string; name: string; data_gb: number; price: number; validity: string | null; activation_time: string | null };
