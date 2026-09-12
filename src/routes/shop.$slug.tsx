@@ -186,8 +186,8 @@ function ProductPage() {
                     </div>
                   ))}
               </dl>
-              {typeof specs.region_note === "string" && (
-                <p className="mt-3 text-xs text-muted-foreground">{specs.region_note}</p>
+              {typeof specs["region_note"] === "string" && (
+                <p className="mt-3 text-xs text-muted-foreground">{String(specs["region_note"])}</p>
               )}
             </div>
           )}

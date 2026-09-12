@@ -95,7 +95,7 @@ export type Database = {
           created_at?: string
           customer_id?: string | null
           id?: string
-          order_number: string
+          order_number?: string
           payment_status?: Database["public"]["Enums"]["payment_status"]
           receiving_phone: string
           status?: Database["public"]["Enums"]["bundle_order_status"]
@@ -177,7 +177,7 @@ export type Database = {
           imei_or_serial?: string | null
           ownership_confirmed?: boolean | null
           photo_urls?: Json
-          request_number: string
+          request_number?: string
           request_type: Database["public"]["Enums"]["request_type"]
           updated_at?: string
           witness_contact?: string | null
@@ -568,7 +568,7 @@ export type Database = {
           id?: string
           landmark?: string | null
           notes?: string | null
-          order_number: string
+          order_number?: string
           order_status?: Database["public"]["Enums"]["order_status"]
           payment_status?: Database["public"]["Enums"]["payment_status"]
           phone: string
