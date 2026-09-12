@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+﻿import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { useState } from "react";
@@ -19,18 +19,17 @@ import { listBundles, listServices } from "@/lib/catalog.functions";
 import { createBundleOrder } from "@/lib/orders.functions";
 import { formatGHS } from "@/lib/format";
 import { BUSINESS } from "@/lib/business";
-import { useAuth } from "@/hooks/useAuth";
 
 export const Route = createFileRoute("/bundles")({
   head: () => ({
     meta: [
-      { title: "Data bundles & AFA registration — Newton's Hub" },
+      { title: "Data bundles & AFA registration â€” Newton's Hub" },
       {
         name: "description",
         content:
           "Order MTN data bundles and AFA registration from Newton's Hub. Pick a bundle, give us the number, pay by mobile money.",
       },
-      { property: "og:title", content: "Data bundles & AFA registration — Newton's Hub" },
+      { property: "og:title", content: "Data bundles & AFA registration â€” Newton's Hub" },
       {
         property: "og:description",
         content: "MTN data bundles and AFA registration, activated by Newton's Hub.",
@@ -40,12 +39,20 @@ export const Route = createFileRoute("/bundles")({
   component: Bundles,
 });
 
-type Bundle = { id: string; network: string; name: string; data_gb: number; price: number; validity: string | null; activation_time: string | null };
+type Bundle = {
+  id: string;
+  network: string;
+  name: string;
+  data_gb: number;
+  price: number;
+  validity: string | null;
+  activation_time: string | null;
+};
 
 function Bundles() {
   const fetchBundles = useServerFn(listBundles);
   const fetchServices = useServerFn(listServices);
-  const { user } = useAuth();
+
   const bundles = useQuery({ queryKey: ["bundles"], queryFn: () => fetchBundles() });
   const services = useQuery({ queryKey: ["services"], queryFn: () => fetchServices() });
 
@@ -60,7 +67,6 @@ function Bundles() {
         data: {
           bundle_id: selected!.id,
           receiving_phone: phone,
-          customer_id: user?.id ?? null,
         },
       }),
     onSuccess: (res) => {
@@ -97,7 +103,9 @@ function Bundles() {
 
       <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {bundles.isLoading
-          ? Array.from({ length: 6 }).map((_, i) => <Skeleton key={i} className="h-28 rounded-xl" />)
+          ? Array.from({ length: 6 }).map((_, i) => (
+              <Skeleton key={i} className="h-28 rounded-xl" />
+            ))
           : (bundles.data ?? []).map((b) => (
               <div key={b.id} className="surface-card flex flex-col p-5">
                 <div className="flex items-center justify-between">
@@ -107,7 +115,7 @@ function Bundles() {
                 <h3 className="mt-3 font-semibold">{b.name}</h3>
                 <p className="text-sm text-muted-foreground">
                   {b.validity ?? "Validity confirmed at activation"}
-                  {b.activation_time ? ` · ${b.activation_time}` : ""}
+                  {b.activation_time ? ` Â· ${b.activation_time}` : ""}
                 </p>
                 <Button
                   className="mt-4"
@@ -151,7 +159,9 @@ function Bundles() {
                 disabled={phone.trim().length < 9 || mutation.isPending}
                 onClick={() => mutation.mutate()}
               >
-                {mutation.isPending ? "Submitting…" : `Request for ${formatGHS(selected?.price ?? 0)}`}
+                {mutation.isPending
+                  ? "Submittingâ€¦"
+                  : `Request for ${formatGHS(selected?.price ?? 0)}`}
               </Button>
             </div>
           )}

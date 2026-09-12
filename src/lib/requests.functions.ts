@@ -1,4 +1,4 @@
-import { createServerFn } from "@tanstack/react-start";
+﻿import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 
 export const submitBuySwapRequest = createServerFn({ method: "POST" })
@@ -17,11 +17,12 @@ export const submitBuySwapRequest = createServerFn({ method: "POST" })
         desired_product_id: z.string().uuid().nullable().optional(),
         customer_notes: z.string().max(1000).optional().or(z.literal("")),
         ownership_confirmed: z.boolean(),
-        customer_id: z.string().uuid().nullable().optional(),
       })
       .parse(data),
   )
   .handler(async ({ data }) => {
+    const { requestIdentity } = await import("./request-auth.server");
+    const userId = await requestIdentity();
     if (!data.ownership_confirmed) {
       throw new Error("Please confirm that the device belongs to you.");
     }
@@ -41,13 +42,14 @@ export const submitBuySwapRequest = createServerFn({ method: "POST" })
         desired_product_id: data.desired_product_id ?? null,
         customer_notes: data.customer_notes || null,
         ownership_confirmed: true,
-        customer_id: data.customer_id ?? null,
+        customer_id: userId,
         admin_status: "pending_review",
         photo_urls: [],
       })
       .select("id, request_number")
       .single();
-    if (error) throw new Error(error.message);
+    if (error)
+      throw new Error("Unable to submit your request. Please try again or contact the shop.");
     return row;
   });
 
@@ -60,11 +62,12 @@ export const submitContactMessage = createServerFn({ method: "POST" })
         phone: z.string().max(30).optional().or(z.literal("")),
         subject: z.string().max(160).optional().or(z.literal("")),
         message: z.string().min(5).max(2000),
-        customer_id: z.string().uuid().nullable().optional(),
       })
       .parse(data),
   )
   .handler(async ({ data }) => {
+    const { requestIdentity } = await import("./request-auth.server");
+    const userId = await requestIdentity();
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { error } = await supabaseAdmin.from("contact_messages").insert({
       name: data.name,
@@ -72,9 +75,10 @@ export const submitContactMessage = createServerFn({ method: "POST" })
       phone: data.phone || null,
       subject: data.subject || null,
       message: data.message,
-      customer_id: data.customer_id ?? null,
+      customer_id: userId,
       status: "new",
     });
-    if (error) throw new Error(error.message);
+    if (error)
+      throw new Error("Unable to submit your request. Please try again or contact the shop.");
     return { ok: true };
   });

@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+﻿import { createFileRoute } from "@tanstack/react-router";
 import { useMutation } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { useState } from "react";
@@ -9,7 +9,6 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { BUSINESS, whatsappLink } from "@/lib/business";
 import { submitContactMessage } from "@/lib/requests.functions";
-import { useAuth } from "@/hooks/useAuth";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
@@ -28,13 +27,12 @@ export const Route = createFileRoute("/contact")({
 });
 
 function Contact() {
-  const { user } = useAuth();
   const send = useServerFn(submitContactMessage);
   const [form, setForm] = useState({ name: "", email: "", phone: "", subject: "", message: "" });
   const [sent, setSent] = useState(false);
 
   const mutation = useMutation({
-    mutationFn: () => send({ data: { ...form, customer_id: user?.id ?? null } }),
+    mutationFn: () => send({ data: { ...form } }),
     onSuccess: () => {
       setSent(true);
       toast.success("Message sent");
@@ -55,7 +53,7 @@ function Contact() {
           <Info label="Second number" value={BUSINESS.secondaryPhone} />
           <Info label="Email" value={BUSINESS.email} />
           <Info label="Instagram" value={BUSINESS.instagram} />
-          <Info label="Pickup" value={BUSINESS.pickupLocations.join(" · ")} />
+          <Info label="Pickup" value={BUSINESS.pickupLocations.join(" Â· ")} />
           <Info label="Delivery" value="Anywhere in Ghana. " />
         </div>
 
@@ -69,15 +67,35 @@ function Contact() {
       <div className="surface-card h-fit p-6">
         {sent ? (
           <p className="text-sm">
-            Thanks — we&apos;ve got your message and will get back to you.
+            Thanks â€” we&apos;ve got your message and will get back to you.
           </p>
         ) : (
           <div className="space-y-4">
             <h2 className="text-sm font-semibold">Send a message</h2>
-            <Row id="name" label="Your name" value={form.name} onChange={(v) => setForm({ ...form, name: v })} />
-            <Row id="phone" label="Phone" value={form.phone} onChange={(v) => setForm({ ...form, phone: v })} />
-            <Row id="email" label="Email (optional)" value={form.email} onChange={(v) => setForm({ ...form, email: v })} />
-            <Row id="subject" label="Subject" value={form.subject} onChange={(v) => setForm({ ...form, subject: v })} />
+            <Row
+              id="name"
+              label="Your name"
+              value={form.name}
+              onChange={(v) => setForm({ ...form, name: v })}
+            />
+            <Row
+              id="phone"
+              label="Phone"
+              value={form.phone}
+              onChange={(v) => setForm({ ...form, phone: v })}
+            />
+            <Row
+              id="email"
+              label="Email (optional)"
+              value={form.email}
+              onChange={(v) => setForm({ ...form, email: v })}
+            />
+            <Row
+              id="subject"
+              label="Subject"
+              value={form.subject}
+              onChange={(v) => setForm({ ...form, subject: v })}
+            />
             <div>
               <Label htmlFor="message">Message</Label>
               <Textarea
@@ -90,10 +108,12 @@ function Contact() {
             </div>
             <Button
               className="w-full"
-              disabled={form.name.trim().length < 2 || form.message.trim().length < 5 || mutation.isPending}
+              disabled={
+                form.name.trim().length < 2 || form.message.trim().length < 5 || mutation.isPending
+              }
               onClick={() => mutation.mutate()}
             >
-              {mutation.isPending ? "Sending…" : "Send message"}
+              {mutation.isPending ? "Sendingâ€¦" : "Send message"}
             </Button>
           </div>
         )}

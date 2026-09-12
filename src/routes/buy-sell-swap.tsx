@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+﻿import { createFileRoute } from "@tanstack/react-router";
 import { useMutation } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { useState } from "react";
@@ -9,19 +9,19 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { submitBuySwapRequest } from "@/lib/requests.functions";
-import { useAuth } from "@/hooks/useAuth";
+
 import { BUSINESS } from "@/lib/business";
 
 export const Route = createFileRoute("/buy-sell-swap")({
   head: () => ({
     meta: [
-      { title: "Sell or swap your phone — Newton's Hub" },
+      { title: "Sell or swap your phone â€” Newton's Hub" },
       {
         name: "description",
         content:
           "Tell Newton's Hub about your phone and we'll review it. Every sell or swap offer is agreed in person after we inspect the device.",
       },
-      { property: "og:title", content: "Sell or swap your phone — Newton's Hub" },
+      { property: "og:title", content: "Sell or swap your phone â€” Newton's Hub" },
       {
         property: "og:description",
         content: "Submit your device details and we'll come back with an offer.",
@@ -32,7 +32,6 @@ export const Route = createFileRoute("/buy-sell-swap")({
 });
 
 function BuySellSwap() {
-  const { user } = useAuth();
   const send = useServerFn(submitBuySwapRequest);
   const [type, setType] = useState<"sell" | "swap">("sell");
   const [form, setForm] = useState({
@@ -54,7 +53,7 @@ function BuySellSwap() {
         data: {
           request_type: type,
           ownership_confirmed: owned,
-          customer_id: user?.id ?? null,
+
           ...form,
         },
       }),
@@ -92,14 +91,49 @@ function BuySellSwap() {
       </div>
 
       <div className="surface-card mt-6 grid gap-4 p-6 sm:grid-cols-2">
-        <F id="customer_name" label="Your name" value={form.customer_name} set={(v) => setForm({ ...form, customer_name: v })} />
-        <F id="customer_phone" label="Phone number" value={form.customer_phone} set={(v) => setForm({ ...form, customer_phone: v })} />
-        <F id="current_brand" label="Phone brand" value={form.current_brand} set={(v) => setForm({ ...form, current_brand: v })} />
-        <F id="current_model" label="Model" value={form.current_model} set={(v) => setForm({ ...form, current_model: v })} />
-        <F id="current_storage" label="Storage" value={form.current_storage} set={(v) => setForm({ ...form, current_storage: v })} />
-        <F id="current_condition" label="Condition" value={form.current_condition} set={(v) => setForm({ ...form, current_condition: v })} />
+        <F
+          id="customer_name"
+          label="Your name"
+          value={form.customer_name}
+          set={(v) => setForm({ ...form, customer_name: v })}
+        />
+        <F
+          id="customer_phone"
+          label="Phone number"
+          value={form.customer_phone}
+          set={(v) => setForm({ ...form, customer_phone: v })}
+        />
+        <F
+          id="current_brand"
+          label="Phone brand"
+          value={form.current_brand}
+          set={(v) => setForm({ ...form, current_brand: v })}
+        />
+        <F
+          id="current_model"
+          label="Model"
+          value={form.current_model}
+          set={(v) => setForm({ ...form, current_model: v })}
+        />
+        <F
+          id="current_storage"
+          label="Storage"
+          value={form.current_storage}
+          set={(v) => setForm({ ...form, current_storage: v })}
+        />
+        <F
+          id="current_condition"
+          label="Condition"
+          value={form.current_condition}
+          set={(v) => setForm({ ...form, current_condition: v })}
+        />
         <div className="sm:col-span-2">
-          <F id="imei_or_serial" label="IMEI or serial (optional)" value={form.imei_or_serial} set={(v) => setForm({ ...form, imei_or_serial: v })} />
+          <F
+            id="imei_or_serial"
+            label="IMEI or serial (optional)"
+            value={form.imei_or_serial}
+            set={(v) => setForm({ ...form, imei_or_serial: v })}
+          />
         </div>
         <div className="sm:col-span-2">
           <Label htmlFor="notes">Anything else we should know?</Label>
@@ -112,7 +146,11 @@ function BuySellSwap() {
           />
         </div>
         <label className="flex items-start gap-3 text-sm sm:col-span-2">
-          <Checkbox checked={owned} onCheckedChange={(v) => setOwned(v === true)} className="mt-0.5" />
+          <Checkbox
+            checked={owned}
+            onCheckedChange={(v) => setOwned(v === true)}
+            className="mt-0.5"
+          />
           <span>
             I confirm this device belongs to me and I can show proof of ownership. Newton&apos;s Hub
             may ask for a witness before completing a swap.
@@ -129,7 +167,7 @@ function BuySellSwap() {
           }
           onClick={() => mutation.mutate()}
         >
-          {mutation.isPending ? "Sending…" : "Submit request"}
+          {mutation.isPending ? "Sendingâ€¦" : "Submit request"}
         </Button>
       </div>
     </div>
