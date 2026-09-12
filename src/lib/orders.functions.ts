@@ -63,6 +63,7 @@ export const createOrder = createServerFn({ method: "POST" })
     const { data: order, error: oErr } = await supabaseAdmin
       .from("orders")
       .insert({
+        order_number: "",
         customer_id: data.customer_id ?? null,
         subtotal,
         delivery_fee: null,
@@ -188,6 +189,7 @@ export const createBundleOrder = createServerFn({ method: "POST" })
     const { data: row, error } = await supabaseAdmin
       .from("bundle_orders")
       .insert({
+        order_number: "",
         bundle_id: bundle.id,
         receiving_phone: data.receiving_phone,
         amount: bundle.price,

@@ -76,7 +76,7 @@ export const getSettings = createServerFn({ method: "GET" }).handler(async () =>
   const supabase = publicClient();
   const { data, error } = await supabase.from("app_settings").select("key, value");
   if (error) throw new Error(error.message);
-  const map: Record<string, unknown> = {};
-  for (const row of data ?? []) map[row.key] = row.value;
+  const map: Record<string, string> = {};
+  for (const row of data ?? []) map[row.key] = JSON.stringify(row.value);
   return map;
 });
