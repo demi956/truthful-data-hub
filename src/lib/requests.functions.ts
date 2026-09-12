@@ -29,7 +29,6 @@ export const submitBuySwapRequest = createServerFn({ method: "POST" })
     const { data: row, error } = await supabaseAdmin
       .from("buy_swap_requests")
       .insert({
-        request_number: "",
         request_type: data.request_type,
         customer_name: data.customer_name,
         customer_phone: data.customer_phone,
